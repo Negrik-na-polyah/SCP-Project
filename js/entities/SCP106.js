@@ -3,6 +3,7 @@ import Enemy from './Enemy.js';
 export default class SCP106 extends Enemy {
     constructor(scene, x, y) {
         super(scene, x, y, 'scp106_placeholder', 120); // Уменьшено здоровье с 250 до 120
+        this.lastDamageTime = 0;
 
         this.speed = 50; // Медленнее, чем другие
         this.isPhasing = false;
@@ -11,14 +12,53 @@ export default class SCP106 extends Enemy {
         this.phaseCooldown = 8000; // Кулдаун между фазами (8 сек)
         this.nextPhaseTime = 0;
 
-        // Визуальный эффект коррозии (пока просто затемнение)
-        // Можно добавить сюда частицы или шейдер позже
+        // Эффект коррозии
+        this.corrosionParticles = this.scene.add.particles('corrosion_particle');
+        this.corrosionEmitter = this.corrosionParticles.createEmitter({
+            frame: 0,
+            x: 0,
+            y: 0,
+            lifespan: 1000,
+            speed: { min: 10, max: 30 },
+            scale: { start: 0.5, end: 0 },
+            quantity: 1,
+            frequency: 100,
+            blendMode: 'ADD',
+            follow: this,
+            followOffset: { x: 0, y: 0 }
+        });
+        this.corrosionEmitter.stop();
+
+        // Зона урона при приближении
+        this.damageZone = this.scene.add.circle(this.x, this.y, 80, 0x000000, 0);
+        this.scene.physics.add.existing(this.damageZone);
+        this.damageZone.body.setCircle(80);
     }
 
     update(time, delta) {
         if (!this.isAlive || !this.scene || !this.scene.player) return;
 
         const player = this.scene.player;
+        
+        // Обновляем позицию зоны урона
+        this.damageZone.x = this.x;
+        this.damageZone.y = this.y;
+
+        // Проверяем расстояние до игрока
+        const distance = Phaser.Math.Distance.Between(this.x, this.y, player.x, player.y);
+        if (distance < 150) {
+            if (!this.corrosionEmitter.on) {
+                this.corrosionEmitter.start();
+            }
+            
+            // Урон игроку при близком нахождении
+            if (distance < 100 && time > this.lastDamageTime + 1000) {
+                player.takeDamage(5);
+                this.lastDamageTime = time;
+            }
+        } else if (this.corrosionEmitter.on) {
+            this.corrosionEmitter.stop();
+        }
 
         // Проверка возможности начать фазу прохода сквозь стены
         if (!this.isPhasing && time > this.nextPhaseTime) {

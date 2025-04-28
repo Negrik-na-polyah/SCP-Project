@@ -155,7 +155,19 @@ export default class GameScene extends Phaser.Scene {
         this.physics.add.collider(this.bullets, this.wallsLayer, this.handleBulletWallCollision, null, this);
 
         // --- Проверка коллизий врагов с игроком --- //
-        this.physics.add.overlap(this.player, this.enemies, this.handlePlayerEnemyCollision, null, this);
+        this.physics.add.overlap(this.player, this.enemies, (player, enemy) => {
+            if (enemy instanceof SCP106) {
+                // Специальная обработка для SCP-106
+                if (enemy.isPhasing) {
+                    // SCP-106 в фазе - проходит сквозь игрока
+                    return;
+                }
+                // Обычный урон
+                player.takeDamage(10);
+            } else {
+                this.handlePlayerEnemyCollision(player, enemy);
+            }
+        }, null, this);
 
         // --- Проверка коллизий игрока с интерактивными объектами и пикапами --- //
         this.physics.add.overlap(this.player, this.pickups, this.handlePlayerPickupOverlap, null, this);
@@ -598,6 +610,13 @@ export default class GameScene extends Phaser.Scene {
             // Используем тайл-координаты и tileSize для получения мировых координат
             const worldX = objData.x * tileSize + tileSize / 2;
             const worldY = objData.y * tileSize + tileSize / 2;
+
+            // Добавляем SCP-106
+            if (objData.type === 'scp106') {
+                const scp106 = new SCP106(this, worldX, worldY);
+                this.enemies.add(scp106);
+                return;
+            }
 
             console.log(`[DEBUG Objects] Processing object: type=${objData.type}, x=${worldX}, y=${worldY}`);
 

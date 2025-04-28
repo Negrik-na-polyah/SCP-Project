@@ -105,9 +105,17 @@ export default class PreloaderScene extends Phaser.Scene {
         // this.load.image('enemy_placeholder', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAACVJREFUeJztwQEBAAAAgiD/r25IQAEAQADwUAIAAAAAAAAAAP8GswAAATkApkQAAAAASUVORK5CYII=');
         // Placeholder для SCP-173 (коричневый квадрат 32x32) - ИСПРАВЛЕН URI
         // this.load.image('scp173_placeholder', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAACVJREFUeJztwQEBAAAAgiD/r+4ICgDQOQEAAAAAAAAAAP8G/gAAAU8DSdYAAAAASUVORK5CYII=');
-        // --- Placeholders для объектов ---
-        // Шкафчик (синий квадрат)
-        // this.load.image('locker_placeholder', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAACJJREFUeJztwQEBAAAAgiD/r25IQAEAQLgDgAQAAAAAAAAAAORrYgABy9KoLwAAAABJRU5ErkJggg==');
+        // --- Текстуры SCP-объектов ---
+        this.load.image('scp106', 'assets/images/scp106.png');
+        this.load.image('scp173', 'assets/images/scp173.png');
+        this.load.image('scp049', 'assets/images/scp049.png');
+        this.load.image('scp096', 'assets/images/scp096.png');
+        this.load.image('scp049_2', 'assets/images/scp049_2.png');
+        this.load.image('scp914', 'assets/images/scp914.png');
+        this.load.image('scp330', 'assets/images/scp330.png');
+        
+        // --- Текстуры объектов ---
+        this.load.image('locker', 'assets/images/locker.png');
         // Аптечка (белый крест на красном)
         // this.load.image('medkit_placeholder', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAHBJREFUeJztzsEJACAMRFH7XzN7uQNwk4kH4kP7fM4gAAAAAAAAAJyVpP0+9j+njwEAAIAAIAAIAAIAAIAAIAAIAAEAAgAAgAAgAAgAAgAAgAAQgAAQgAAQgAAQgAAQgAIgAADgB1y7BW2g3t9TAAAAAElFTkSuQmCC');
         // --- Placeholders для патронов ---
